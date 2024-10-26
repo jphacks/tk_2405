@@ -61,6 +61,7 @@ export default function AuthForm() {
       if (response.status === 200) {
         console.log(isLogin ? "ログイン成功" : "サインアップ成功", data);
         localStorage.setItem("user_id", data.user_id); // ユーザーIDをローカルストレージに保存
+        localStorage.setItem("user_name", data.user_name);
         router.push("/");
       } else if (response.status === 403) {
         setError("パスワードが間違っています。");
@@ -79,7 +80,7 @@ export default function AuthForm() {
   return (
     <Box textAlign="center" mt={8}>
       <Heading size="lg" mb={4}>
-        シェアトレ！
+        さあ、筋トレを始めよう！
       </Heading>
       <Card maxW="sm" mx="auto" boxShadow="lg">
         <CardHeader>
