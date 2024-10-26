@@ -60,9 +60,9 @@ export default function AuthForm() {
 
       if (response.status === 200) {
         console.log(isLogin ? "ログイン成功" : "サインアップ成功", data);
-        localStorage.setItem("user_id", data.user_id); // ユーザーIDをローカルストレージに保存
+        localStorage.setItem("user_id", data.user_id); 
         localStorage.setItem("user_name", data.user_name);
-        router.push("/");
+        router.push("/dashboard");
       } else if (response.status === 403) {
         setError("パスワードが間違っています。");
       } else if (response.status === 404) {

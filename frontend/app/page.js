@@ -30,9 +30,10 @@ export default function Home() {
         height="100%"
         gap={3}
       >
-        <Heading fontSize="6xl">あなたの筋トレをサポート</Heading>
+        <Heading fontSize="5xl">あなたの筋トレをサポート</Heading>
         <Text textAlign="center" fontSize="xl">
-          シェアトレ！で筋トレを始めましょう．あなたに合ったトレーニングルームが見つかります．
+          シェアトレ！で筋トレを始めましょう<br />
+          あなたに合ったトレーニングルームが見つかります
         </Text>
         <Button
           as={NextLink}

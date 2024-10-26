@@ -140,10 +140,10 @@ export default function Selector({ isOpen, onClose }) {
                 <Center>
                   <Stack alignItems="center">
                     <Text fontSize="2xl" fontWeight="bold">
-                      筋トレ設定
+                      トレーニング内容の設定
                     </Text>
                     <Text fontSize="md" color="gray.600">
-                      あなたに合った筋トレの強度と時間を設定してください．
+                      あなたに合った筋トレの強度と時間を設定しましょう
                     </Text>
                   </Stack>
                 </Center>

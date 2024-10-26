@@ -24,6 +24,11 @@ export default function DashBoard() {
     router.push("/");
   }
 
+  const handleLogout = () => {
+    localStorage.clear(); // localStorageのデータをクリア
+    router.push("/"); // ログインページにリダイレクト
+  };
+
   return (
     <Box height="100vh">
       <Flex
@@ -33,9 +38,10 @@ export default function DashBoard() {
         height="100%"
         gap={3}
       >
-        <Heading fontSize="6xl">ようこそ{userName}さん！</Heading>
+        <Heading fontSize="3xl">ようこそ{userName}さん！</Heading>
         <Text textAlign="center" fontSize="xl">
-          シェアトレ！で筋トレを始めましょう．あなたに合ったトレーニングルームが見つかります．
+          シェアトレ！で筋トレを始めましょう<br />
+          あなたに合ったトレーニングルームが見つかります
         </Text>
         <Button
           onClick={onOpen}
@@ -45,6 +51,16 @@ export default function DashBoard() {
           colorScheme="teal"
         >
           筋トレを始める
+        </Button>
+        <Button
+          onClick={handleLogout}
+          mt={3}
+          size="md"
+          color="teal.600"
+          variant="outline"
+          borderColor="teal.300"
+        >
+          ログアウト
         </Button>
         <Selector isOpen={isOpen} onClose={onClose} />
       </Flex>
