@@ -66,7 +66,7 @@ const WebcamStreamComponent = ({ children }) => {
             const adjustedX = x * (canvas.width / videoRef.current.videoWidth);
             const adjustedY = y * (canvas.height / videoRef.current.videoHeight);
             ctx.beginPath();
-            ctx.arc(adjustedX, adjustedY, 5, 0, 2 * Math.PI);
+            ctx.arc(adjustedX, adjustedY, 3, 0, 2 * Math.PI);
             ctx.fillStyle = 'red';
             ctx.fill();
           }
