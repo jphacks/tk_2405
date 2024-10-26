@@ -65,9 +65,9 @@ def find_mostly_matched_room(cur, strength, duration):
 
 def lambda_handler(event, context):
     status_code = 200
-    query = json.loads(event.get("queryStringParameters", "{}") if event.get("queryStringParameters", "{}") else "{}")
+    query_param = json.loads(event.get("queryStringParameters", "{}") if event.get("queryStringParameters", "{}") else "{}")
     body = json.loads(event.get("body", "{}") if event.get("body", "{}") else "{}")
-    if not all(key in body for key in ("strength", "duration")):
+    if not ( all(key in body for key in ("strength", "duration")) and all(key in query_param for key in ("user_id",)) ):
         status_code = 400
         response_body = {
             "message": "Bad Request"
@@ -87,6 +87,8 @@ def lambda_handler(event, context):
         result = cur.fetchone()
         if result:
             matched_room_id = result[0]
+            cur.execute(f"INSERT INTO room_participants (room_id, user_id) VALUES ('{matched_room_id}', '{query_param["user_id"]}');")
+            conn.commit()
         else:
             status_code = 503
             response_body = {
