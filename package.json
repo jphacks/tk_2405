@@ -2,6 +2,7 @@
   "name": "tk_2405",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "main": "./lib/index.js",
   "packageManager": "pnpm@9.12.2",
   "scripts": {
@@ -45,7 +46,7 @@
     "cssnano": "^7.0.6",
     "parcel-bundler": "^1.12.5",
     "parcel-plugin-static-files-copy": "^2.6.0",
-    "postcss": "^8.4.47",
+    "postcss-preset-env": "^10.0.8",
     "yalc": "1.0.0-pre.53"
   }
 }
