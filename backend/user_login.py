@@ -1,10 +1,6 @@
-import datetime
 import json
 import logging
 import os
-import random
-import sys
-import site
 
 import boto3
 import psycopg2
@@ -31,18 +27,24 @@ def lambda_handler(event, context):
     body = event.get("body", {}) if event.get("body", {}) else {}
     conn = connect_db()
     cur = conn.cursor()
-    cur.execute(f"SELECT user_name FROM users WHERE user_id='{body["user_id"]}'")
-    if cur.fetchone():
-        status_code = 409
+    cur.execute(f"SELECT user_name, password FROM users WHERE user_id='{body["user_id"]}';")
+    result = cur.fetchone()
+    if not result:
+        status_code = 404
         response_body = {
-            "message": f"'{body["user_id"]}' already exists."
+            "message": f"No such user_id was found.",
         }
     else:
-        cur.execute(f"INSERT INTO users (user_id, user_name, password) VALUES ('{body["user_id"]}', '{body["user_name"]}', '{body["password"]}');")
-        conn.commit()
-        status_code = 200
-        response_body = {
-            "user_id": body["user_id"]
-        }
+        user_name, password = result
+        if body["password"] != password:
+            status_code = 403
+            response_body = {
+                "message": f"Password is not correct."
+            }
+        else:
+            status_code = 200
+            response_body = {
+                "user_id": body["user_id"],
+                "user_name": user_name
+            }
     return {"statusCode": status_code, "body": json.dumps(response_body)}
-    
