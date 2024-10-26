@@ -23,8 +23,14 @@ def connect_db():
 
 def lambda_handler(event, context):
     status_code = 200
-    query = event.get("queryStringParameters", {}) if event.get("queryStringParameters", {}) else {}
-    body = event.get("body", {}) if event.get("body", {}) else {}
+    query = json.loads(event.get("queryStringParameters", "{}") if event.get("queryStringParameters", "{}") else "{}")
+    body = json.loads(event.get("body", "{}") if event.get("body", "{}") else "{}")
+    if not all(key in body for key in ("user_id", "password")):
+        status_code = 400
+        response_body = {
+            "message": "Bad Request"
+        }
+        return {"statusCode": status_code, "body": json.dumps(response_body)}
     conn = connect_db()
     cur = conn.cursor()
     cur.execute(f"SELECT user_name, password FROM users WHERE user_id='{body["user_id"]}';")
