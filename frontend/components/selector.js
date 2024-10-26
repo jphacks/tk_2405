@@ -29,7 +29,7 @@ export default function Selector({ isOpen, onClose }) {
   const [isWaiting, setIsWaiting] = useState(false);
   const { register, handleSubmit, watch, setValue } = useForm({
     defaultValues: {
-      strength: "1",
+      strength: "2",
       duration: 30,
     },
   });
@@ -55,25 +55,26 @@ export default function Selector({ isOpen, onClose }) {
       }
       setIsWaiting(true);
       const result = await res.json();
+      console.log(res.status);
       console.log(result);
     } catch (error) {
       console.error("Error:", error);
     }
   };
 
-  useEffect(() => {
-    if (isWaiting) {
-      router.push(`/room/${result.roomId}`);
-    }
-  }, [isWaiting]);
+  //   useEffect(() => {
+  //     if (isWaiting) {
+  //       router.push(`/room/${result.roomId}`);
+  //     }
+  //   }, [isWaiting]);
 
   const getStrengthText = (strength) => {
     switch (strength) {
-      case "0":
-        return "軽め";
       case "1":
-        return "普通";
+        return "軽め";
       case "2":
+        return "普通";
+      case "3":
         return "きつめ";
       default:
         return "普通";
@@ -160,9 +161,9 @@ export default function Selector({ isOpen, onClose }) {
                       colorScheme="teal"
                     >
                       <Stack>
-                        <Radio value="0">軽め</Radio>
-                        <Radio value="1">普通</Radio>
-                        <Radio value="2">きつめ</Radio>
+                        <Radio value="1">軽め</Radio>
+                        <Radio value="2">普通</Radio>
+                        <Radio value="3">きつめ</Radio>
                       </Stack>
                     </RadioGroup>
                   </FormControl>

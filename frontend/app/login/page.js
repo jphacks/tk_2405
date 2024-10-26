@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   Box,
   Button,
@@ -22,62 +22,61 @@ import {
   Text,
   Alert,
   AlertIcon,
-} from '@chakra-ui/react';
+} from "@chakra-ui/react";
 
 export default function AuthForm() {
   const [isLogin, setIsLogin] = useState(true);
-  const [userId, setUserId] = useState('');
-  const [password, setPassword] = useState('');
-  const [userName, setUserName] = useState('');
-  const [error, setError] = useState('');
+  const [userId, setUserId] = useState("");
+  const [password, setPassword] = useState("");
+  const [userName, setUserName] = useState("");
+  const [error, setError] = useState("");
   const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
 
     if (!userId || !password || (!isLogin && !userName)) {
-      setError('ID、パスワード、ニックネーム（新規登録時）を入力してください。');
+      setError(
+        "ID、パスワード、ニックネーム（新規登録時）を入力してください。"
+      );
       return;
     }
 
     try {
-      const response = await fetch(
-        isLogin ? '/api/login' : '/api/register',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            user_id: userId,
-            password,
-            user_name: isLogin ? undefined :userName,
-          }),
-        }
-      );
+      const response = await fetch(isLogin ? "/api/login" : "/api/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          user_id: userId,
+          password,
+          user_name: isLogin ? undefined : userName,
+        }),
+      });
 
       const data = await response.json();
 
       if (response.status === 200) {
-        console.log(isLogin ? 'ログイン成功' : 'サインアップ成功', data);
-        localStorage.setItem('user_id', data.user_id); // ユーザーIDをローカルストレージに保存
-        router.push('/'); 
+        console.log(isLogin ? "ログイン成功" : "サインアップ成功", data);
+        localStorage.setItem("user_id", data.user_id); // ユーザーIDをローカルストレージに保存
+        router.push("/");
       } else if (response.status === 403) {
-        setError('パスワードが間違っています。');
+        setError("パスワードが間違っています。");
       } else if (response.status === 404) {
-        setError('ユーザーが存在しません。');
+        setError("ユーザーが存在しません。");
       } else if (response.status === 409) {
-        setError('このIDはすでに登録されています。');
+        setError("このIDはすでに登録されています。");
       } else {
-        throw new Error(data.message || 'エラーが発生しました。');
+        throw new Error(data.message || "エラーが発生しました。");
       }
     } catch (err) {
       setError(err.message);
     }
   };
 
-return (
+  return (
     <Box textAlign="center" mt={8}>
       <Heading size="lg" mb={4}>
         シェアトレ！
@@ -85,7 +84,7 @@ return (
       <Card maxW="sm" mx="auto" boxShadow="lg">
         <CardHeader>
           <Heading size="md" textAlign="center">
-            {isLogin ? 'ログイン' : '新規登録'}
+            {isLogin ? "ログイン" : "新規登録"}
           </Heading>
         </CardHeader>
         <Divider />
@@ -173,8 +172,8 @@ return (
         <CardFooter>
           <Text fontSize="sm" color="gray.500" textAlign="center">
             {isLogin
-              ? 'アカウントをお持ちでない場合は、新規登録タブをクリックしてください。'
-              : 'すでにアカウントをお持ちの場合は、ログインタブをクリックしてください。'}
+              ? "アカウントをお持ちでない場合は、新規登録タブをクリックしてください。"
+              : "すでにアカウントをお持ちの場合は、ログインタブをクリックしてください。"}
           </Text>
         </CardFooter>
       </Card>
