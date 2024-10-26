@@ -19,36 +19,39 @@ import {
   Center,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/router";
 
 export default function Home() {
   const { register, handleSubmit, watch, setValue } = useForm({
     defaultValues: {
-      strength: "1", // デフォルト値を設定
-      duration: 30, // デフォルト値を設定
+      strength: "1",
+      duration: 30,
     },
   });
 
   const strength = watch("strength");
   const duration = watch("duration");
 
+  const router = useRouter();
+
   const onSubmit = async (data) => {
     const userId = localStorage.getItem("userId");
     const reqData = { ...data, userId: userId };
     try {
-      const res = await fetch("/api/example", {
+      const res = await fetch("/api/enter-room", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(reqData),
       });
-
       if (!res.ok) {
         throw new Error(`HTTP error! status: ${res.status}`);
       }
 
       const result = await res.json();
       console.log(result);
+      router.push(`/room/${result.roomId}`);
     } catch (error) {
       console.error("Error:", error);
     }
