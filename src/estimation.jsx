@@ -3,15 +3,34 @@ import * as tf from '@tensorflow/tfjs';
 import '@tensorflow/tfjs-backend-webgl';
 import * as posedetection from '@tensorflow-models/pose-detection';
 
+const PoseContext = createContext();
+
+export const usePose = () => {
+    return useContext(PoseContext);
+};
+
+// Custom hook to execute a callback when pose coordinates are updated
+export const usePoseCoordinates = (callback) => {
+    const poseData = usePose();
+  
+    useEffect(() => {
+      if (poseData && poseData.length > 0) {
+        const keypoints = poseData[0].keypoints;
+        callback(keypoints); // Execute callback with the updated keypoints
+      }
+    }, [poseData, callback]);
+  };
+  
+
 const estimation = (videoRef, detector) => {
+    const [poseData, setPoseData] = useState(null);
     const detect = async () => {
-        const videoElement = videoRef.current;
-        const result = await detector.estimatePoses(videoElement, {
-            flipHorizontal: false,
-            maxPoses: 1,
-            scoreThreshold: 0.6,
-        });
-        return result;
+        if (videoRef.current) {
+            const videoElement = videoRef.current;
+            result = await detector.estimatePoses(videoElement);
+            setPoseData(result);
+            requestAnimationFrame(() => detect());
+        }
     }
     detect();
 }
