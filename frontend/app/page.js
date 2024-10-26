@@ -29,7 +29,13 @@ export default function Home() {
         <Text textAlign="center" fontSize="xl">
           シェアトレ！で筋トレを始めましょう．あなたに合ったトレーニングルームが見つかります．
         </Text>
-        <Button onClick={onOpen} mt={3} size="lg">
+        <Button
+          onClick={onOpen}
+          mt={3}
+          size="lg"
+          color="white"
+          colorScheme="teal"
+        >
           筋トレを始める
         </Button>
         <Selector isOpen={isOpen} onClose={onClose} />

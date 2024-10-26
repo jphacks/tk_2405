@@ -24,7 +24,7 @@ import {
   ModalBody,
   ModalCloseButton,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 
@@ -59,11 +59,16 @@ export default function Selector({ isOpen, onClose }) {
       setIsWaiting(true);
       const result = await res.json();
       console.log(result);
-      //   router.push(`/room/${result.roomId}`);
     } catch (error) {
       console.error("Error:", error);
     }
   };
+
+  useEffect(() => {
+    if (isWaiting) {
+      router.push(`/room/${result.roomId}`);
+    }
+  }, [isWaiting]);
 
   const getStrengthText = (strength) => {
     switch (strength) {
@@ -91,15 +96,22 @@ export default function Selector({ isOpen, onClose }) {
           <>
             <ModalHeader>
               <Center>
-                <Stack alignItems="center">
-                  <Text fontSize="2xl" fontWeight="bold">
-                    部屋を探しています
-                  </Text>
-                  <Spinner size="xl" mr={5} speed="1s" thickness="4px" />
-                  <Text mt={4} textAlign="center">
-                    あなたに最適な部屋を見つけています…
-                  </Text>
-                  <Text textAlign="center">しばらくお待ちください</Text>
+                <Stack alignItems="center" spacing={7}>
+                  <Text fontSize="2xl">部屋を探しています</Text>
+                  <Spinner size="xl" speed="1s" thickness="4px" />
+                  <Box>
+                    <Text
+                      textAlign="center"
+                      fontWeight="normal"
+                      fontSize="md"
+                      mb={1}
+                    >
+                      あなたに最適な部屋を見つけています…
+                    </Text>
+                    <Text textAlign="center" fontWeight="normal" fontSize="sm">
+                      しばらくお待ちください
+                    </Text>
+                  </Box>
                 </Stack>
               </Center>
             </ModalHeader>
@@ -148,6 +160,7 @@ export default function Selector({ isOpen, onClose }) {
                     <RadioGroup
                       value={strength}
                       onChange={(value) => setValue("strength", value)}
+                      colorScheme="teal"
                     >
                       <Stack>
                         <Radio value="0">軽め</Radio>
@@ -168,6 +181,7 @@ export default function Selector({ isOpen, onClose }) {
                       step={10}
                       {...register("duration")}
                       onChange={(val) => setValue("duration", val)}
+                      colorScheme="teal"
                     >
                       <SliderTrack>
                         <SliderFilledTrack />
@@ -189,7 +203,7 @@ export default function Selector({ isOpen, onClose }) {
               <ModalFooter>
                 <Button
                   type="submit"
-                  bgColor="gray.900"
+                  colorScheme="teal"
                   color="white"
                   borderRadius="md"
                   w="100%"
