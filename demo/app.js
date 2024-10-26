@@ -38,7 +38,8 @@ async function loadAndPredict() {
         ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
 
         // 骨格認識のポイント描画
-        poses.forEach((pose) => {
+        if (poses && poses.length > 0) {
+            const pose = poses[0];
             pose.keypoints.forEach((keypoint) => {
                 if (keypoint.score > 0.5) {
                     ctx.beginPath();
@@ -46,8 +47,13 @@ async function loadAndPredict() {
                     ctx.fillStyle = 'red';
                     ctx.fill();
                 }
+
+                // 肩の位置をログとして吐き出す
+                if (keypoint.name === 'left_shoulder' || keypoint.name === 'right_shoulder') {
+                    console.log(`${keypoint.name}: x=${keypoint.x}, y=${keypoint.y}`);
+                }
             });
-        });
+        }
 
         requestAnimationFrame(detectPose);
     }
