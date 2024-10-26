@@ -9,6 +9,7 @@ import WebcamStreamComponent from './webcam_old';
 
 import WebcamComponent from './webcam';
 import estimation from './estimation';
+import Mappingdraw from './root';
 
 const App = () => {
     const [detector, setDetector] = React.useState(null);
@@ -35,10 +36,11 @@ const App = () => {
     return (
         <>
             <h1>Push-up Counter</h1>
-            {/* <WebcamStreamComponent /> */}
-            <div>
+            <WebcamStreamComponent detector={detector}/>
+            {/* <div>
                 <video ref={videoref} autoPlay playsInline />
-            </div>
+            </div> */}
+            {/* <Mappingdraw videoRef={videoref} detector={detector} /> */}
         </>
     )
 }

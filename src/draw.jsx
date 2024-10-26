@@ -6,7 +6,7 @@ export const usePose = () => {
   return useContext(PoseContext);
 }
 
-const draw = (poses, {children}) => {
+const draw = (poseData, poses) => {
   const canvasRef = useRef(null);
 
   const drawPose = (poses) => {

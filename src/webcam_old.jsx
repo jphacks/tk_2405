@@ -23,6 +23,46 @@ export const usePose = () => {
   return useContext(PoseContext);
 };
 
+const calcurate = async (poseData, count, isUnderLine, lastChangeTime, debounceTime) => {
+  // console.log('Pose data:', poseData);
+  if(!poseData || poseData.length === 0) {
+    return {count: count, isUnderLine: isUnderLine, lastChangeTime: lastChangeTime};
+  }
+  const lineY = 300; 
+  let leftShoulder = null;
+  let rightShoulder = null;
+  const pose = poseData[0];
+  pose.keypoints.forEach((keypoint) => {
+      // console.log('Keypoint:', keypoint.name);
+    if (keypoint.name === 'left_shoulder') {
+        leftShoulder = keypoint;
+        // console.log('Left shoulder:', leftShoulder);
+    }
+    if (keypoint.name === 'right_shoulder') {
+        rightShoulder = keypoint;
+    }
+});
+
+if (leftShoulder !== null && rightShoulder !== null) {
+    const avgY = (leftShoulder.y + rightShoulder.y) / 2;
+    const currentTime = Date.now();
+
+    if (avgY >= lineY && !isUnderLine && currentTime - lastChangeTime > debounceTime) {
+        isUnderLine = true;
+        lastChangeTime = currentTime;
+    } else if (avgY < lineY && isUnderLine && currentTime - lastChangeTime > debounceTime) {
+        isUnderLine = false;
+        count = count + 1;
+        lastChangeTime = currentTime;
+        console.log(`Count: ${count}`);
+    }
+    // console.log('isUnderLine:', isUnderLine);
+  return {count: count, isUnderLine: isUnderLine, lastChangeTime: lastChangeTime};
+}
+return {count: count, isUnderLine: isUnderLine, lastChangeTime: lastChangeTime};
+}
+
+
 // Custom hook to execute a callback when pose coordinates are updated
 export const usePoseCoordinates = (callback) => {
   const poseData = usePose();
@@ -35,7 +75,7 @@ export const usePoseCoordinates = (callback) => {
   }, [poseData, callback]);
 };
 
-const WebcamStreamComponent = ({ children }) => {
+const WebcamStreamComponent = (decoder, { children }) => {
   const [poseData, setPoseData] = useState(null);
   const canvasRef = useRef(null);
 
@@ -51,7 +91,7 @@ const WebcamStreamComponent = ({ children }) => {
         console.error('Error accessing webcam: ', err); // Handle errors if webcam access fails
       }
     };
-
+    let result = { count: 0, isUnderLine: false, lastChangeTime: 0, debounceTime: 500 };
     // Function to detect poses from the video stream
     const detectPose = async () => {
       const detectorConfig = {
@@ -65,6 +105,11 @@ const WebcamStreamComponent = ({ children }) => {
           const poses = await detector.estimatePoses(videoRef.current);
           setPoseData(poses); // Update pose data state
           drawPose(poses); // Draw the detected pose on the canvas
+          const tmp = await calcurate(poses, result.count, result.isUnderLine, result.lastChangeTime, result.debounceTime);
+          console.log('tmp:', tmp);
+          result.count = tmp.count;
+          result.isUnderLine = tmp.isUnderLine;
+          result.lastChangeTime = tmp.lastChangeTime; 
         }
         requestAnimationFrame(detect); // Continue detecting in the next animation frame
       };
@@ -101,23 +146,26 @@ const WebcamStreamComponent = ({ children }) => {
   }, []);
 
   // Use the custom hook to access pose coordinates and evaluate shoulder position
-  usePoseCoordinates((keypoints) => {
-    const leftShoulder = keypoints.find(point => point.name === 'left_shoulder');
-    const rightShoulder = keypoints.find(point => point.name === 'right_shoulder');
+  // usePoseCoordinates((keypoints) => {
+  //   console.log('Keypoints:', keypoints);
+  //   const leftShoulder = keypoints.find(point => point.name === 'left_shoulder');
+  //   const rightShoulder = keypoints.find(point => point.name === 'right_shoulder');
+  //   let result = { count: 0, isUnderLine: false, lastChangeTime: 0, debounceTime: 500 };
+  //   console.log('Left shoulder:', leftShoulder);
+  //   console.log('Right shoulder:', rightShoulder);
+  //   if (leftShoulder && rightShoulder && leftShoulder.score > 0.3 && rightShoulder.score > 0.3) {
+  //     // Calculate the average Y position of both shoulders
+  //     const avgY = (leftShoulder.y + rightShoulder.y) / 2;
+  //     console.log('Average Y position:', avgY);
+  //     const lineY = 300; // Threshold Y coordinate for push-up detection (e.g., the "down" position)
+  //     let result = evaluateShoulderPosition(avgY, lineY, result);
+  //     if (isUnderLine === false) {
+  //       console.log('Push-up successful!'); // Log to console when a push-up is completed
+  //     }
+  //   }
+  // });
     let result = { count: 0, isUnderLine: false, lastChangeTime: 0, debounceTime: 500 };
-    console.log('Left shoulder:', leftShoulder);
-    console.log('Right shoulder:', rightShoulder);
-    if (leftShoulder && rightShoulder && leftShoulder.score > 0.3 && rightShoulder.score > 0.3) {
-      // Calculate the average Y position of both shoulders
-      const avgY = (leftShoulder.y + rightShoulder.y) / 2;
-      console.log('Average Y position:', avgY);
-      const lineY = 300; // Threshold Y coordinate for push-up detection (e.g., the "down" position)
-      let result = evaluateShoulderPosition(avgY, lineY, result);
-      if (isUnderLine === false) {
-        console.log('Push-up successful!'); // Log to console when a push-up is completed
-      }
-    }
-  });
+
 
   return (
     <PoseContext.Provider value={poseData}>

@@ -4,7 +4,10 @@ import estimation from './estimation';
 import draw from './draw';
 import WebcamComponent from './webcam';
 
-export const mappingdraw = (videoRef, props) => {
-    const poseData = estimation(videoRef, props.detector);
-    return draw(poseData, props);
+const Mappingdraw = (videoRef, detector, props) => {
+    const [poseData, setPoseData] = useState(null);
+    estimation(videoRef, detector, setPoseData());
+    // return draw(poseData={poseData}, poses={poseData});
 }
+
+export default Mappingdraw;

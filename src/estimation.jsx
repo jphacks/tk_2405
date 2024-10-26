@@ -22,8 +22,8 @@ export const usePoseCoordinates = (callback) => {
   };
   
 
-const estimation = (videoRef, detector) => {
-    const [poseData, setPoseData] = useState(null);
+const estimation = (videoRef, detector, setPoseData) => {
+    // const [poseData, setPoseData] = useState(null);
     const detect = async () => {
         if (videoRef.current) {
             const videoElement = videoRef.current;

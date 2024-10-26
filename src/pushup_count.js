@@ -22,7 +22,7 @@ function evaluateShoulderPosition(avgY, lineY, count, isUnderLine, lastChangeTim
         lastChangeTime = currentTime;
         console.log(`Count: ${count}`);
     }
-    return {count, isUnderLine, lastChangeTime};
+    return count, isUnderLine, lastChangeTime;
 }
 
 export { addCount, evaluateShoulderPosition };
