@@ -4,43 +4,49 @@ const ctx = canvas.getContext('2d');
 
 // カメラのセットアップ
 async function setupCamera() {
-    const stream = await navigator.mediaDevices.getUserMedia({
-        video: true,
-        audio: false,
-    });
-    videoElement.srcObject = stream;
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: 'user' },
+            audio: false,
+        });
+        videoElement.srcObject = stream;
 
-    return new Promise((resolve) => {
-        videoElement.onloadedmetadata = () => {
-            resolve(videoElement);
-        };
-    });
+        return new Promise((resolve) => {
+            videoElement.onloadedmetadata = () => {
+                resolve(videoElement);
+            };
+        });
+    } catch (err) {
+        console.error("カメラのアクセス中にエラーが発生しました: ", err);
+        alert("カメラのアクセスが許可されているか、デバイスにカメラが接続されているか確認してください。");
+    }
 }
 
-// PoseNetのセットアップと推論処理
+// MoveNetのセットアップと推論処理
 async function loadAndPredict() {
-    // PoseNetモデルの読み込み
-    const net = await posenet.load();
+    let modelType = poseDetection.movenet.modelType.SINGLEPOSE_LIGHTNING;
+    const detectorConfig = { modelType };
+    const detector = await poseDetection.createDetector(poseDetection.SupportedModels.MoveNet, detectorConfig);
 
     // ビデオが準備できたら、リアルタイムで骨格を認識
     videoElement.play();
     async function detectPose() {
-        const pose = await net.estimateSinglePose(videoElement, {
-            flipHorizontal: false,
-        });
+        const poses = await detector.estimatePoses(videoElement);
 
         // 描画クリア
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
 
         // 骨格認識のポイント描画
-        pose.keypoints.forEach((keypoint) => {
-            if (keypoint.score > 0.5) {
-                ctx.beginPath();
-                ctx.arc(keypoint.position.x, keypoint.position.y, 5, 0, 2 * Math.PI);
-                ctx.fillStyle = 'red';
-                ctx.fill();
-            }
+        poses.forEach((pose) => {
+            pose.keypoints.forEach((keypoint) => {
+                if (keypoint.score > 0.5) {
+                    ctx.beginPath();
+                    ctx.arc(keypoint.x, keypoint.y, 5, 0, 2 * Math.PI);
+                    ctx.fillStyle = 'red';
+                    ctx.fill();
+                }
+            });
         });
 
         requestAnimationFrame(detectPose);
