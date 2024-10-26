@@ -40,7 +40,7 @@ export default function Selector({ isOpen, onClose }) {
   const router = useRouter();
 
   const onSubmit = async (data) => {
-    const userId = localStorage.getItem("userId");
+    const userId = localStorage.getItem("user_id");
     const reqData = { ...data, userId: userId };
     try {
       const res = await fetch("/api/enter-room", {
@@ -62,11 +62,11 @@ export default function Selector({ isOpen, onClose }) {
     }
   };
 
-  //   useEffect(() => {
-  //     if (isWaiting) {
-  //       router.push(`/room/${result.roomId}`);
-  //     }
-  //   }, [isWaiting]);
+  useEffect(() => {
+    if (isWaiting) {
+      router.push(`/room/${result.roomId}`);
+    }
+  }, [isWaiting]);
 
   const getStrengthText = (strength) => {
     switch (strength) {

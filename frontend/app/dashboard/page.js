@@ -10,15 +10,18 @@ import {
   Stack,
   Flex,
 } from "@chakra-ui/react";
-import NextLink from "next/link";
+import { useDisclosure } from "@chakra-ui/react";
+import Selector from "../../components/selector";
 import { useRouter } from "next/navigation";
 
-export default function Home() {
-  const router = useRouter();
+export default function DashBoard() {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const userName = localStorage.getItem("user_name");
   const userId = localStorage.getItem("user_id");
+  const router = useRouter();
 
-  if (userId) {
-    router.push("/dashboard");
+  if (!userId) {
+    router.push("/");
   }
 
   return (
@@ -30,20 +33,20 @@ export default function Home() {
         height="100%"
         gap={3}
       >
-        <Heading fontSize="6xl">あなたの筋トレをサポート</Heading>
+        <Heading fontSize="6xl">ようこそ{userName}さん！</Heading>
         <Text textAlign="center" fontSize="xl">
           シェアトレ！で筋トレを始めましょう．あなたに合ったトレーニングルームが見つかります．
         </Text>
         <Button
-          as={NextLink}
-          href="/login"
+          onClick={onOpen}
           mt={3}
           size="lg"
           color="white"
           colorScheme="teal"
         >
-          今すぐ始める（無料）
+          筋トレを始める
         </Button>
+        <Selector isOpen={isOpen} onClose={onClose} />
       </Flex>
     </Box>
   );

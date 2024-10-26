@@ -4,12 +4,12 @@ const endpoint =
 export async function POST(request) {
   const { userId, strength, duration } = await request.json();
 
-  const res = await fetch(endpoint, {
+  const res = await fetch(endpoint + "?user_id=" + userId, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ userId, strength, duration }),
+    body: JSON.stringify({ strength, duration }),
   });
 
   const data = await res.json();
