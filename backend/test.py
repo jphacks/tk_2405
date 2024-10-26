@@ -1,5 +1,10 @@
 import json
 
+def return_sitepackages():
+    import os
+    import site
+    ret = {d: os.listdir(d) for d in site.getsitepackages()}
+    return {"statusCode": 200, "body": json.dumps(ret)}
 
 def lambda_handler(event, context):
     status_code = 200
