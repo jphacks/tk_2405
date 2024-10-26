@@ -7,8 +7,8 @@
   "packageManager": "pnpm@9.12.2",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "cross-env NODE_ENV=development parcel ./demo/index.html --no-hmr --open",
-    "build": "cross-env NODE_ENV=production parcel build ./demo/index.html --public-url ./",
+    "watch": "cross-env NODE_ENV=development parcel ./lib/index.html --no-hmr --open",
+    "build": "cross-env NODE_ENV=production parcel build ./lib/index.html --public-url ./",
     "lint": "eslint .",
     "build-dep": "yarn && yarn build",
     "link-core": "yalc link @tensorflow/tfjs-core",
