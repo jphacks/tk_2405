@@ -1,0 +1,19 @@
+/* 動画とキャンバスを重ねるためのスタイル */
+#overlayContainer {
+    position: relative;
+}
+
+/* 動画のスタイル */
+#videoPlayer {
+    width: auto;
+    height: 80vh;
+}
+
+/* キャンバスのスタイル */
+#overlayCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: auto;
+    height: 80vh;
+}

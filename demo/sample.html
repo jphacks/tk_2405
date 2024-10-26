@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,27 +10,28 @@
     <!-- タイトル -->
     <title>MoveNetデモ</title>
     <!-- 自作CSS -->
-    <link href="./css/styles.css" rel="stylesheet" type="text/css">
+    <link href="./styles.css" rel="stylesheet" type="text/css">
 </head>
+
 <body>
-    <div>
-        <h1>WEBカメラの映像を表示</h1>
-        <div>
-            <video id="video"></video>
-        </div>
-    </div>  
-    <script>
-        const video = document.getElementById("video")
-        navigator.mediaDevices.getUserMedia({
-            video: true,
-            audio: false,
-        }).then(stream => {
-            video.srcObject = stream;
-            video.play()
-        }).catch(e => {
-          console.log(e)
-        })
-    </script>  
+    <h1>MoveNetデモ</h1>
+
+    <table border="1">
+        <tr>
+            <td>
+                <!-- オーバーレイ用のコンテナ -->
+                <div id="overlayContainer">
+                    <!-- 動画プレーヤー要素 -->
+                    <video id="videoPlayer" width="1920" height="1080"></video>
+                    <!-- オーバーレイ用のキャンバス -->
+                    <canvas id="overlayCanvas" width="1920" height="1080"></canvas>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <!-- 自作JavaScrip -->
     <script src="../lib/pose_detection.js"></script>
 </body>
+
 </html>
