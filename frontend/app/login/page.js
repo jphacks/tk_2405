@@ -43,7 +43,7 @@ export default function AuthForm() {
 
     try {
       const response = await fetch(
-        isLogin ? 'ログインを処理するAPIへ' : '新規登録を処理するAPIへ',
+        isLogin ? '/api/login' : '/api/register',
         {
           method: 'POST',
           headers: {
@@ -52,20 +52,26 @@ export default function AuthForm() {
           body: JSON.stringify({
             user_id: userId,
             password,
-            user_name: userName,
+            user_name: isLogin ? undefined :userName,
           }),
         }
       );
 
       const data = await response.json();
 
-      if (!response.ok) {
+      if (response.status === 200) {
+        console.log(isLogin ? 'ログイン成功' : 'サインアップ成功', data);
+        localStorage.setItem('user_id', data.user_id); // ユーザーIDをローカルストレージに保存
+        router.push('/selector'); 
+      } else if (response.status === 403) {
+        setError('パスワードが間違っています。');
+      } else if (response.status === 404) {
+        setError('ユーザーが存在しません。');
+      } else if (response.status === 409) {
+        setError('このIDはすでに登録されています。');
+      } else {
         throw new Error(data.message || 'エラーが発生しました。');
       }
-
-      console.log(isLogin ? 'ログイン成功' : '新規登録成功', data);
-      localStorage.setItem('user_id', data.user_id);
-      router.push('/selector');
     } catch (err) {
       setError(err.message);
     }
