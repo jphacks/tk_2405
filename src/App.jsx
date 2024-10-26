@@ -23,14 +23,11 @@ const App = () => {
         initLoad();
     }, []);
 
-    const videoRef = WebcamStreamComponent();
-    console.log(videoRef);
+
     return (
         <>
             <h1>Push-up Counter</h1>
-            <div>
-                <video ref={videoRef} autoPlay playsInline />
-            </div>
+            <WebcamStreamComponent />
         </>
     )
 }
