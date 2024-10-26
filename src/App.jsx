@@ -5,7 +5,7 @@ import '@tensorflow/tfjs-converter';
 import '@tensorflow/tfjs-backend-webgl';
 
 import React, { useEffect, useRef } from 'react';
-import WebcamComponent from './webcam';
+import WebcamStreamComponent from './webcam';
 
 const App = () => {
     useEffect(() => {
@@ -23,10 +23,14 @@ const App = () => {
         initLoad();
     }, []);
 
+    const videoRef = WebcamStreamComponent();
+    console.log(videoRef);
     return (
         <>
             <h1>Push-up Counter</h1>
-            <WebcamComponent />
+            <div>
+                <video ref={videoRef} autoPlay playsInline />
+            </div>
         </>
     )
 }

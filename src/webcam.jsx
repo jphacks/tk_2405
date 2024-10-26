@@ -1,10 +1,18 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 
-const WebcamComponent = () => {
-  const videoRef = useRef(null);
+let videoRef = null;
 
+const initializeVideoRef = () => {
+  if (!videoRef) {
+    videoRef = React.createRef();
+  }
+};
+
+initializeVideoRef();
+
+const WebcamStreamComponent = () => {
   useEffect(() => {
-    const getVideo = async () => {
+    const getVideoStream = async () => {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true });
         if (videoRef.current) {
@@ -15,14 +23,11 @@ const WebcamComponent = () => {
       }
     };
 
-    getVideo();
+    getVideoStream();
   }, []);
+  console.log(videoRef);
 
-  return (
-    <div>
-      <video ref={videoRef} autoPlay playsInline />
-    </div>
-  );
+  return videoRef.current ? videoRef : null;
 };
 
-export default WebcamComponent;
+export default WebcamStreamComponent;
