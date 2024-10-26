@@ -17,11 +17,14 @@ import {
   CardHeader,
   CardBody,
   Center,
+  Spinner,
 } from "@chakra-ui/react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const [isWaiting, setIsWaiting] = useState(false);
   const { register, handleSubmit, watch, setValue } = useForm({
     defaultValues: {
       strength: "1",
@@ -48,7 +51,7 @@ export default function Home() {
       if (!res.ok) {
         throw new Error(`HTTP error! status: ${res.status}`);
       }
-
+      setIsWaiting(true);
       const result = await res.json();
       console.log(result);
       router.push(`/room/${result.roomId}`);
@@ -69,6 +72,15 @@ export default function Home() {
         return "普通";
     }
   };
+
+  if (isWaiting) {
+    return (
+      <Center h="100vh">
+        <Spinner size="xl" mr={5} />
+        <Text mt={4}>部屋を探しています...</Text>
+      </Center>
+    );
+  }
 
   return (
     <Box>
