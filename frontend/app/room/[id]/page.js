@@ -1,6 +1,5 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import {
   Box,
   Avatar,
@@ -14,6 +13,7 @@ import {
   Stack,
 } from "@chakra-ui/react";
 import { useRoom } from "../../../lib/use-room";
+import UserState from "../../../components/UserState";
 
 export default function TrainingRoom({ params }) {
   let userId = null;
@@ -38,16 +38,36 @@ export default function TrainingRoom({ params }) {
     }
   };
 
+  const getCurrentStatus = (status) => {
+    switch (status) {
+      case 0:
+        return "休憩中";
+      default:
+        return "トレーニング中";
+    }
+  };
+
   return (
     <Box>
       {data ? (
-        <Stack>
-          <Box>
-            <Text>トレーニング中…</Text>
-            <Text>強度: {getStrengthText(data?.training_strength)}</Text>
-            <Text>残り時間：{Math.floor(data?.remain_lifetime / 60)}分</Text>
-          </Box>
-        </Stack>
+        <Box>
+          <Stack>
+            <Box>
+              <Text>トレーニング中…</Text>
+              <Text>強度: {getStrengthText(data?.training_strength)}</Text>
+              <Text>残り時間：{Math.floor(data?.remain_lifetime / 60)}分</Text>
+            </Box>
+          </Stack>
+          <SimpleGrid columns={2} spacing={10}>
+            {data.participants.map((user) => (
+              <UserState
+                key={user.user_id}
+                name={user.user_name}
+                exercise={getCurrentStatus(user.current_status)}
+              />
+            ))}
+          </SimpleGrid>
+        </Box>
       ) : (
         <Text>Loading...</Text>
       )}
