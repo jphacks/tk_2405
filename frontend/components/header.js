@@ -3,8 +3,6 @@
 import { Box, Flex, Heading } from "@chakra-ui/react";
 
 export default function Header() {
-  const userId = localStorage.getItem("userId");
-
   return (
     <Box as="header">
       <Flex

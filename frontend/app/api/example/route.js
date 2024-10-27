@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 const endpoint =
-  "https://gxaf9cnsbb.execute-api.ap-northeast-1.amazonaws.com/main/test?err";
+  "https://gxaf9cnsbb.execute-api.ap-northeast-1.amazonaws.com/main/test";
 
 export async function POST(request) {
   const query = { key: "うんこ" };
@@ -13,7 +13,6 @@ export async function POST(request) {
     body: JSON.stringify(query),
   });
 
-  const status = res.status;
   const data = await res.json();
-  return NextResponse.json({ status: status, data: data });
+  return NextResponse.json(data);
 }
