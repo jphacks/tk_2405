@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 
+// webカメラの映像を取得するコンポーネント
 function WebcamComponent() {
     const videoRef = useRef(null);
 
