@@ -15,11 +15,19 @@ import { useRouter } from "next/navigation";
 
 export default function Home() {
   const router = useRouter();
-  const userId = localStorage.getItem("user_id");
-
-  if (userId) {
-    router.push("/dashboard");
+  // const userId = localStorage.getItem("user_id");
+  try{
+    const userId = localStorage.getItem("user_id");
+    if (userId) {
+      router.push("/dashboard");
+    }
+  } catch(e) {
+    console.log("データがありません");
   }
+
+  // if (userId) {
+  //   router.push("/dashboard");
+  // }
 
   return (
     <Box height="100vh">

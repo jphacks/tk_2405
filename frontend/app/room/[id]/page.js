@@ -1,5 +1,5 @@
 "use client";
-
+import WebcamStreamComponent from "@/lib/pose-estimation";
 import {
   Box,
   Avatar,
@@ -60,6 +60,8 @@ export default function TrainingRoom({ params }) {
           </Stack>
           <SimpleGrid columns={2} spacing={10}>
             {data.participants.map((user) => (
+              user.userId === userId ?
+              <WebcamStreamComponent />:
               <UserState
                 key={user.user_id}
                 name={user.user_name}

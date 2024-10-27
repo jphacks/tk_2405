@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState, createContext, useContext } from 'r
 import * as tf from '@tensorflow/tfjs';
 import '@tensorflow/tfjs-backend-webgl';
 import * as posedetection from '@tensorflow-models/pose-detection';
-import { evaluateShoulderPosition } from './pushup_count';
 
 let videoRef = null;
 
