@@ -99,6 +99,7 @@ const WebcamStreamComponent = ({ children }) => {
     let result = { count: 0, isUnderLine: false, lastChangeTime: 0, debounceTime: 500 };
     // Function to detect poses from the video stream
     const detectPose = async () => {
+      tf.setBackend('webgl'); // Set the WebGL backend for TensorFlow.js
       const detectorConfig = {
         modelType: posedetection.movenet.modelType.SINGLEPOSE_LIGHTNING,
       };

@@ -1,8 +1,11 @@
 const endpoint =
-  "https://gxaf9cnsbb.execute-api.ap-northeast-1.amazonaws.com/main/rooms/enter";
+  "https://gxaf9cnsbb.execute-api.ap-northeast-1.amazonaws.com/release/rooms/enter";
 
 export async function POST(request) {
   const { userId, strength, duration } = await request.json();
+  console.log(
+    `userId: ${userId}, strength: ${strength}, duration: ${duration}`
+  );
 
   const res = await fetch(endpoint + "?user_id=" + userId, {
     method: "POST",
@@ -12,6 +15,7 @@ export async function POST(request) {
     body: JSON.stringify({ strength, duration }),
   });
 
+  console.log("Response status:", res); // ステータスコードを確認
   const data = await res.json();
 
   return new Response(JSON.stringify(data), {
