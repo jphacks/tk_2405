@@ -12,7 +12,7 @@ export async function GET(request) {
     );
   }
 
-  const endpoint = `https://gxaf9cnsbb.execute-api.ap-northeast-1.amazonaws.com/release/rooms/info/${roomId}?user_id=${userId}`;
+  const endpoint = `https://gxaf9cnsbb.execute-api.ap-northeast-1.amazonaws.com/release/rooms/${roomId}?user_id=${userId}`;
 
   try {
     const res = await fetch(endpoint, {

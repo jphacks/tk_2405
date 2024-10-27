@@ -15,6 +15,7 @@ export async function POST(request) {
     body: JSON.stringify({ strength, duration }),
   });
 
+  console.log("Response status:", res); // ステータスコードを確認
   const data = await res.json();
 
   return new Response(JSON.stringify(data), {
