@@ -57,16 +57,17 @@ export default function Selector({ isOpen, onClose }) {
       const result = await res.json();
       console.log(res.status);
       console.log(result);
+      router.push(`/room/${result.room_id}`);
     } catch (error) {
       console.error("Error:", error);
     }
   };
 
-  useEffect(() => {
-    if (isWaiting) {
-      router.push(`/room/${result.roomId}`);
-    }
-  }, [isWaiting]);
+  // useEffect(() => {
+  //   if (isWaiting) {
+  //     router.push(`/room/${result.room_id}`);
+  //   }
+  // }, [isWaiting]);
 
   const getStrengthText = (strength) => {
     switch (strength) {
