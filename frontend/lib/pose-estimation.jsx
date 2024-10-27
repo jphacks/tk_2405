@@ -75,7 +75,7 @@ export const usePoseCoordinates = (callback) => {
   }, [poseData, callback]);
 };
 
-const WebcamStreamComponent = (decoder, { children }) => {
+const WebcamStreamComponent = ({ children }) => {
   const [poseData, setPoseData] = useState(null);
   const canvasRef = useRef(null);
 
