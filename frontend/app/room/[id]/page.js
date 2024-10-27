@@ -1,5 +1,4 @@
 "use client";
-import WebcamStreamComponent from "@/lib/pose-estimation";
 import {
   Box,
   Avatar,
@@ -14,6 +13,8 @@ import {
 } from "@chakra-ui/react";
 import { useRoom } from "../../../lib/use-room";
 import UserState from "../../../components/UserState";
+import WebcamStreamComponent from "@/lib/pose-estimation";
+
 
 export default function TrainingRoom({ params }) {
   let userId = null;
@@ -23,6 +24,8 @@ export default function TrainingRoom({ params }) {
   }
   const id = params.id;
   const { data, error } = useRoom(id, userId);
+  console.log(userId);
+  console.log(JSON.stringify(data));
   console.log(data?.training_strength);
 
   const getStrengthText = (strength) => {
@@ -51,24 +54,40 @@ export default function TrainingRoom({ params }) {
     <Box>
       {data ? (
         <Box>
-          <Stack>
-            <Box>
-              <Text>トレーニング中…</Text>
-              <Text>強度: {getStrengthText(data?.training_strength)}</Text>
-              <Text>残り時間：{Math.floor(data?.remain_lifetime / 60)}分</Text>
-            </Box>
-          </Stack>
-          <SimpleGrid columns={2} spacing={10}>
-            {data.participants.map((user) => (
-              user.userId === userId ?
-              <WebcamStreamComponent />:
-              <UserState
-                key={user.user_id}
-                name={user.user_name}
-                exercise={getCurrentStatus(user.current_status)}
-              />
-            ))}
-          </SimpleGrid>
+          <Container maxW="1000px">
+            <Stack>
+              <Card>
+                <CardHeader>トレーニング中…</CardHeader>
+                <CardBody>
+                  <Text>強度: {getStrengthText(data?.training_strength)}</Text>
+                  <Text>
+                    残り時間：{Math.floor(data?.remain_lifetime)}分
+                  </Text>
+                </CardBody>
+              </Card>
+            </Stack>
+            <SimpleGrid columns={2} spacing={10}>
+            {/* {data.participants.map((user) => (<WebcamStreamComponent />))} */}
+              {/* {data.participants.map((user) => userId === user.userId ? (<WebcamStreamComponent key={user.user_id}/>):  (
+                <UserState
+                  key={user.user_id}
+                  name={user.user_name}
+                  exercise={getCurrentStatus(user.current_status)}
+                />
+              ))} */}
+              {data.participants.map((user) => 
+  user.user_id === userId ? (
+    <WebcamStreamComponent key={user.user_id} />
+  ) : (
+    <UserState
+      key={user.user_id}
+      name={user.user_name}
+      exercise={getCurrentStatus(user.current_status)}
+    />
+  )
+)}
+            </SimpleGrid>
+          </Container>
         </Box>
       ) : (
         <Text>Loading...</Text>

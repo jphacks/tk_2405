@@ -93,6 +93,7 @@ const WebcamStreamComponent = ({ children }) => {
     let result = { count: 0, isUnderLine: false, lastChangeTime: 0, debounceTime: 500 };
     // Function to detect poses from the video stream
     const detectPose = async () => {
+      tf.setBackend('webgl');
       const detectorConfig = {
         modelType: posedetection.movenet.modelType.SINGLEPOSE_LIGHTNING,
       };
@@ -105,7 +106,7 @@ const WebcamStreamComponent = ({ children }) => {
           setPoseData(poses); // Update pose data state
           drawPose(poses); // Draw the detected pose on the canvas
           const tmp = await calcurate(poses, result.count, result.isUnderLine, result.lastChangeTime, result.debounceTime);
-          console.log('tmp:', tmp);
+          // console.log('tmp:', tmp);
           result.count = tmp.count;
           result.isUnderLine = tmp.isUnderLine;
           result.lastChangeTime = tmp.lastChangeTime; 
@@ -168,11 +169,11 @@ const WebcamStreamComponent = ({ children }) => {
 
   return (
     <PoseContext.Provider value={poseData}>
-      <div style={{ position: 'relative', width: '640px', height: '480px' }}>
+      <div style={{ position: 'relative', width: '360px', height: '200px' }}>
         {/* Video element to display the webcam feed */}
-        <video ref={videoRef} autoPlay playsInline style={{ width: '640px', height: '480px' }} />
+        <video ref={videoRef} autoPlay playsInline style={{ width: '360px', height: '200px' }} />
         {/* Canvas element to draw the pose on top of the video feed */}
-        <canvas ref={canvasRef} style={{ position: 'absolute', top: 0, left: 0, width: '640px', height: '480px' }} />
+        <canvas ref={canvasRef} style={{ position: 'absolute', top: 0, left: 0, width: '360px', height: '200px' }} />
         {children}
       </div>
     </PoseContext.Provider>
