@@ -41,25 +41,25 @@ const calcurate = async (poseData, count, isUnderLine, lastChangeTime, debounceT
     if (keypoint.name === 'right_shoulder') {
         rightShoulder = keypoint;
     }
-});
+  });
 
-if (leftShoulder !== null && rightShoulder !== null) {
-    const avgY = (leftShoulder.y + rightShoulder.y) / 2;
-    const currentTime = Date.now();
+  if (leftShoulder !== null && rightShoulder !== null) {
+      const avgY = (leftShoulder.y + rightShoulder.y) / 2;
+      const currentTime = Date.now();
 
-    if (avgY >= lineY && !isUnderLine && currentTime - lastChangeTime > debounceTime) {
-        isUnderLine = true;
-        lastChangeTime = currentTime;
-    } else if (avgY < lineY && isUnderLine && currentTime - lastChangeTime > debounceTime) {
-        isUnderLine = false;
-        count = count + 1;
-        lastChangeTime = currentTime;
-        console.log(`Count: ${count}`);
-    }
-    // console.log('isUnderLine:', isUnderLine);
+      if (avgY >= lineY && !isUnderLine && currentTime - lastChangeTime > debounceTime) {
+          isUnderLine = true;
+          lastChangeTime = currentTime;
+      } else if (avgY < lineY && isUnderLine && currentTime - lastChangeTime > debounceTime) {
+          isUnderLine = false;
+          count = count + 1;
+          lastChangeTime = currentTime;
+          console.log(`Count: ${count}`);
+      }
+      // console.log('isUnderLine:', isUnderLine);
+    return {count: count, isUnderLine: isUnderLine, lastChangeTime: lastChangeTime};
+  }
   return {count: count, isUnderLine: isUnderLine, lastChangeTime: lastChangeTime};
-}
-return {count: count, isUnderLine: isUnderLine, lastChangeTime: lastChangeTime};
 }
 
 
