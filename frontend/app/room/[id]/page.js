@@ -51,22 +51,28 @@ export default function TrainingRoom({ params }) {
     <Box>
       {data ? (
         <Box>
-          <Stack>
-            <Box>
-              <Text>トレーニング中…</Text>
-              <Text>強度: {getStrengthText(data?.training_strength)}</Text>
-              <Text>残り時間：{Math.floor(data?.remain_lifetime / 60)}分</Text>
-            </Box>
-          </Stack>
-          <SimpleGrid columns={2} spacing={10}>
-            {data.participants.map((user) => (
-              <UserState
-                key={user.user_id}
-                name={user.user_name}
-                exercise={getCurrentStatus(user.current_status)}
-              />
-            ))}
-          </SimpleGrid>
+          <Container maxW="1000px">
+            <Stack>
+              <Card>
+                <CardHeader>トレーニング中…</CardHeader>
+                <CardBody>
+                  <Text>強度: {getStrengthText(data?.training_strength)}</Text>
+                  <Text>
+                    残り時間：{Math.floor(data?.remain_lifetime / 60)}分
+                  </Text>
+                </CardBody>
+              </Card>
+            </Stack>
+            <SimpleGrid columns={2} spacing={10}>
+              {data.participants.map((user) => (
+                <UserState
+                  key={user.user_id}
+                  name={user.user_name}
+                  exercise={getCurrentStatus(user.current_status)}
+                />
+              ))}
+            </SimpleGrid>
+          </Container>
         </Box>
       ) : (
         <Text>Loading...</Text>
