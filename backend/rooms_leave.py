@@ -42,6 +42,7 @@ def lambda_handler(event, context):
     cur = conn.cursor()
     cur.execute(f"SELECT user_id FROM users WHERE user_id = '{query_param["user_id"]}';")
     if cur.fetchone():
+        cur.execute(f"UPDATE users SET current_status = 0 WHERE user_id = '{query_param["user_id"]}';")
         try:
             cur.execute(f"DELETE FROM room_participants WHERE user_id = '{query_param["user_id"]}';")
             conn.commit()

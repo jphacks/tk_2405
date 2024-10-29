@@ -65,8 +65,9 @@ def find_mostly_matched_room(cur, strength, duration):
 
 def lambda_handler(event, context):
     status_code = 200
-    query_param = json.loads(event.get("queryStringParameters", "{}") if event.get("queryStringParameters", "{}") else "{}")
-    body = json.loads(event.get("body", "{}") if event.get("body", "{}") else "{}")
+    query_param = event.get("queryStringParameters", {}) if event.get("queryStringParameters", {}) else {}
+    body = event.get("body", "{}") if event.get("body", "{}") else "{}"
+    body = json.loads(body)
     if not ( all(key in body for key in ("strength", "duration")) and all(key in query_param for key in ("user_id",)) ):
         status_code = 400
         response_body = {
@@ -87,15 +88,16 @@ def lambda_handler(event, context):
         result = cur.fetchone()
         if result:
             matched_room_id = result[0]
-            cur.execute(f"INSERT INTO room_participants (room_id, user_id) VALUES ('{matched_room_id}', '{query_param["user_id"]}');")
-            conn.commit()
         else:
             status_code = 503
             response_body = {
                 "message": "Failed to create new room."
             }
             return {"statusCode": status_code, "body": json.dumps(response_body)}
+        cur.execute(f"INSERT INTO room_participants (room_id, user_id) VALUES ('{matched_room_id}', '{query_param["user_id"]}');")
+        conn.commit()
     response_body = {
         "room_id": f"r{matched_room_id}"
     }
     return {"statusCode": status_code, "body": json.dumps(response_body)}
+    

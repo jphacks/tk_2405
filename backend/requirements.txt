@@ -1,3 +1,4 @@
-aws-psycopg2
+# Python 3.12
+psycopg2!=2.9.10  # Avoid build error
 boto3
 pytz
